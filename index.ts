@@ -12,7 +12,7 @@ app.post("/translate", (req: Request, res: Response) => {
     // @ts-expect-error
     .then((result) => {
       console.log(result.text);
-      res.json(result);
+      res.json({ translation: result.text });
     })
     // @ts-expect-error
     .catch((err) => {
