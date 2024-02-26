@@ -1,18 +1,18 @@
 import express, { Request, Response } from "express";
-const translatte = require("translatte");
-const NodeCache = require("node-cache");
+import NodeCache from "node-cache";
+// @ts-expect-error: This library does not have types
+import translatte from "translatte";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const translationCache = new NodeCache({ stdTTL: 3600 }); // Cache for 1 hour
+// Cache with a timeout of 300 seconds (5 minutes)
+const translationCache = new NodeCache({ stdTTL: 300 });
 
 app.use(express.json());
 
 app.post("/translate", async (req: Request, res: Response) => {
   try {
-    console.log("req.body.textreq.body.text", req.body.text);
-
     if (typeof req.body.text !== "string" && !req.body.text) {
       return res
         .status(400)
@@ -26,12 +26,17 @@ app.post("/translate", async (req: Request, res: Response) => {
         .json({ error: "Text to translate should not be an empty string." });
     }
 
-    const translationResult = await translatte(text, {
-      from: "en",
-      to: "fr",
-    });
+    let translation = translationCache.get(text);
 
-    res.json({ translation: translationResult.text });
+    if (!translation) {
+      const translationResult = await translatte(text, {
+        from: "en",
+        to: "fr",
+      });
+      translation = translationResult.text;
+      translationCache.set(text, translation);
+    }
+    res.json({ translation });
   } catch (error) {
     console.error("Error:", error);
     res
