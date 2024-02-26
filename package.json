@@ -7,7 +7,9 @@
   "author": "Tarun Sahnan",
   "license": "MIT",
   "dependencies": {
+    "@types/node-cache": "^4.2.5",
     "express": "4.17.1",
+    "node-cache": "^5.1.2",
     "translatte": "^3.0.1"
   },
   "devDependencies": {
