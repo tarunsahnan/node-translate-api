@@ -6,6 +6,10 @@
   "repository": "https://github.com/tarunsahnan/node-translate-api",
   "author": "Tarun Sahnan",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon --exec ts-node index.ts",
+    "build": "tsc"
+  },
   "dependencies": {
     "@types/node-cache": "^4.2.5",
     "express": "4.17.1",
